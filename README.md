@@ -9,3 +9,11 @@
 ## İlham kaynağı
 
 Bu bağımsız sahne sentetik su istasyonu örnekleri kullanır. [Kaynak proje](https://github.com/storytold/effectcraft).
+
+## Sahne ayarları
+
+- Halka sayısı
+- Yayılma süresi (s)
+- Yatay yarıçap
+
+Sekiz saniyelik zaman çizelgesinden bir kare seçip **PNG indir** ile 720 × 405 piksel dışa aktarabilirsin.
