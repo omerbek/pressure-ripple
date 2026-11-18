@@ -6,6 +6,15 @@ const mint = '#9ef4dc';
 const amber = '#ffcb7d';
 const ink = '#152129';
 const duration = 8;
+const controls = [...document.querySelectorAll('#settings input')];
+const settings = Object.fromEntries(controls.map(input => [
+  input.id, input.type === 'number' ? Number(input.value) : input.value
+]));
+controls.forEach(input => input.addEventListener('input', () => {
+  if (input.type === 'number' && (input.value === '' || !input.validity.valid)) return;
+  settings[input.id] = input.type === 'number' ? input.valueAsNumber : input.value;
+  draw();
+}));
 
 function rect(x, y, w, h, color) {
   ctx.fillStyle = color;
@@ -30,10 +39,10 @@ function dot(x, y, radius, color = mint) {
 const range = length => Array.from({length}, (_, index) => index);
 
 function render(t) {
-  range(5).forEach(i => {
-    const p = (t / 3 + i / 5) % 1;
+  range(settings.count).forEach(i => {
+    const p = (t / settings.period + i / settings.count) % 1;
     ctx.globalAlpha = 1 - p;
-    line(range(65).map(k => [360 + 210 * p * Math.cos(k * Math.PI / 32), 204 + 145 * p * Math.sin(k * Math.PI / 32)]), amber, 4);
+    line(range(65).map(k => [360 + settings.radius * p * Math.cos(k * Math.PI / 32), 204 + 145 * p * Math.sin(k * Math.PI / 32)]), amber, 4);
   });
   ctx.globalAlpha = 1;
   dot(360, 204, 13);
@@ -77,6 +86,13 @@ play.addEventListener('click', () => {
 seek.addEventListener('input', () => {
   position = Number(seek.value);
   draw();
+});
+
+document.querySelector('#save').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'pressure-ripple.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 });
 
 draw();
